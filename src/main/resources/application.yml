@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 400
+
+spring:
+  application:
+    name: rate-limiter
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2s
+      lettuce:
+        pool:
+          max-active: 64
+          max-idle: 32
+          min-idle: 8
+
+rate-limiter:
+  # Applied to any client without an explicit config (POST /api/config).
+  default-capacity: 100
+  default-refill-rate-per-second: 10
+  # Idle buckets expire from Redis after this long.
+  bucket-ttl-seconds: 3600
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
